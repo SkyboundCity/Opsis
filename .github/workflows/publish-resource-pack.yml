@@ -1,0 +1,53 @@
+name: Publish resource pack
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "Opsis/**"
+      - ".github/workflows/publish.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: resource-pack-publish
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Validate resource pack
+        run: |
+          test -f "Opsis/pack.mcmeta"
+          test -f "Opsis/pack.png"
+
+      - name: Build ZIP
+        working-directory: Opsis
+        run: |
+          zip -r ../Opsis.zip .
+
+      - name: Calculate SHA-1
+        id: hash
+        run: |
+          echo "sha1=$(sha1sum Opsis.zip | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="pack-${GITHUB_SHA::12}"
+
+          gh release create "$TAG" \
+            Opsis.zip \
+            --title "Resource pack ${GITHUB_SHA::12}" \
+            --notes "Built from commit ${GITHUB_SHA}
+
+          SHA-1: ${{ steps.hash.outputs.sha1 }}" \
+            --latest
