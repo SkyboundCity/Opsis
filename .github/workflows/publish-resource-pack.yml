@@ -31,7 +31,7 @@ jobs:
       - name: Build ZIP
         working-directory: Opsis
         run: |
-          zip -r ../Opsis.zip .
+          zip -r ../Opsis.zip . -x "*.DS_Store"
 
       - name: Calculate SHA-1
         id: hash
