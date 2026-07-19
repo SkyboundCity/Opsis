@@ -9,10 +9,10 @@ in vec3 worldSkyDirection;
 
 out vec4 fragColor;
 
-const float HAZE_FULL_Y = -0.1;
+const float HAZE_FULL_Y = 0.05;
 const float HAZE_CLEAR_Y = 0.2;
-const float HAZE_DESATURATION = 0.68;
-const float HAZE_BRIGHTNESS = 1.16;
+const float HAZE_DESATURATION = 0.7;
+const float HAZE_BRIGHTNESS = 1.1;
 const float HAZE_STRENGTH = 0.4;
 
 void main() {
