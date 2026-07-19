@@ -9,5 +9,7 @@ in float cylindricalVertexDistance;
 out vec4 fragColor;
 
 void main() {
-    fragColor = apply_fog(ColorModulator, sphericalVertexDistance, cylindricalVertexDistance, 0.0, FogSkyEnd, FogSkyEnd, FogSkyEnd, FogColor);
+    // don't apply_fog with tainted FogColor to avoid
+    // y-dependent void darkness from FogRenderer#computeFogColor
+    fragColor = ColorModulator;
 }
